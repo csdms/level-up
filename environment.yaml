@@ -1,0 +1,10 @@
+# A Python 2.7 env for running the nc20reanalysis example.
+name: lvlup
+channels:
+  - conda-forge
+dependencies:
+  - python =2.7
+  - ipython
+  - numpy
+  - scipy
+  - basemap
