@@ -16,7 +16,7 @@ def read(rean_file):
     from scipy.io import netcdf
 
     try:
-        f = netcdf.netcdf_file(rean_file, 'r')
+        f = netcdf.netcdf_file(rean_file, 'r', mmap=False)
     except IOError:
         print('File "' + rean_file + '" cannot be read.')
         return
