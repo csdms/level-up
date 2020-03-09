@@ -8,3 +8,5 @@ dependencies:
   - numpy
   - scipy
   - basemap
+  - pytest
+  - coverage
