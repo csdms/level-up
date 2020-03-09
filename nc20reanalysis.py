@@ -58,9 +58,9 @@ def prep(rean_data):
     data['hgt'] = rean_data['hgt'].data * rean_data['hgt'].scale_factor \
                   + rean_data['hgt'].add_offset
 
-    # Convert time variable (which is in hours since 1800-01-01) into
+    # Convert time variable (which is in hours since 0001-01-01) into
     # calendar dates. Add to data dict.
-    start_time = '1800-01-01' # from rean_data['time'].units
+    start_time = '0001-01-01' # from rean_data['time'].units
     start_time_cal = time.strptime(start_time, '%Y-%m-%d')
     start_time_sec = calendar.timegm(start_time_cal)
     sec_in_hour = 60.0*60.0
@@ -71,7 +71,7 @@ def prep(rean_data):
     return data
 
 
-def view(prep_data, dayofyear=176, show=False, outfile='gph.png'):
+def view(prep_data, dayofyear=46, show=False, outfile='gph.png'):
     """
     Draws a contour plot of the mean 500 mb geopotential surface for a
     specified day of the year with data from a NOAA-CIRES 20th Century
