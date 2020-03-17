@@ -51,5 +51,12 @@ def test_view_bad_data():
         v = view([1, 2, 3])
 
 
+def test_view_bad_dayofyear():
+    r = read(reanalysis_file)
+    p = prep(r)
+    with pytest.raises(IndexError):
+        v = view(p, dayofyear=1000)
+
+
 # def test_view_output_exists():
 #     assert os.path.exists('gph.png')
