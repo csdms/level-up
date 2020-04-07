@@ -2,7 +2,7 @@
 
 import os
 import pytest
-from nc20reanalysis import read, prep, view
+from nc20reanalysis import Nc20Reanalysis
 
 
 test_dir = os.path.dirname(__file__)
@@ -14,49 +14,69 @@ def test_file_exists():
     assert os.path.exists(reanalysis_file) == True
 
 
+def test_instantiate():
+    n = Nc20Reanalysis()
+    assert isinstance(n, Nc20Reanalysis)
+    assert n.filename is None
+
+
+def test_instantiate_with_file():
+    n = Nc20Reanalysis(reanalysis_file)
+    assert isinstance(n, Nc20Reanalysis)
+    assert n.filename == reanalysis_file
+
+
 def test_read_no_file():
     with pytest.raises(TypeError):
-        r = read()
+        n = Nc20Reanalysis()
+        n.read()
 
 
 def test_read_not_netcdf_file():
-    r = read('foo.txt')
-    assert r == None
+    n = Nc20Reanalysis('foo.txt')
+    n.read()
+    assert n.filename == 'foo.txt'
+    assert n.level == None
 
 
 def test_read_success():
-    r = read(reanalysis_file)
-    assert type(r) == dict
-    assert r['file'] == reanalysis_file
-    assert r['level'] == 500.0
+    n = Nc20Reanalysis(reanalysis_file)
+    n.read()
+    assert n.filename == reanalysis_file
+    assert n.level == 500.0
+
+
+def test_read_success_set_file():
+    n = Nc20Reanalysis()
+    n.filename = reanalysis_file
+    n.read()
+    assert n.filename == reanalysis_file
+    assert n.level == 500.0
 
 
 def test_prep_no_data():
-    with pytest.raises(TypeError):
-        p = prep()
-
-
-def test_prep_bad_data():
-    with pytest.raises(TypeError):
-        p = prep([1, 2, 3])
+    with pytest.raises(AttributeError):
+        n = Nc20Reanalysis()
+        n.prep()
 
 
 def test_view_no_data():
     with pytest.raises(TypeError):
-        v = view()
-
-
-def test_view_bad_data():
-    with pytest.raises(TypeError):
-        v = view([1, 2, 3])
+        n = Nc20Reanalysis()
+        n.view()
 
 
 def test_view_bad_dayofyear():
-    r = read(reanalysis_file)
-    p = prep(r)
+    n = Nc20Reanalysis(reanalysis_file)
+    n.read()
+    n.prep()
     with pytest.raises(IndexError):
-        v = view(p, dayofyear=1000)
+        n.view(dayofyear=1000)
 
 
-# def test_view_output_exists():
-#     assert os.path.exists('gph.png')
+def test_view_output_exists():
+    n = Nc20Reanalysis(reanalysis_file)
+    n.read()
+    n.prep()
+    n.view()
+    assert os.path.exists('gph.png')
